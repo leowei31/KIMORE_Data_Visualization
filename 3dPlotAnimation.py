@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 import numpy as np
 from mpl_toolkits.mplot3d import axes3d, art3d
+from matplotlib.animation import PillowWriter
 
-muscle = np.genfromtxt("JointPositionExercise3(2).csv", delimiter = ',', skip_header = 1)
+muscle = np.genfromtxt("JointPositionExercise1Filtered.csv", delimiter = ',', skip_header = 1)
 
 xMax, xMin = 0, 0
 yMax, yMin = 0, 0
@@ -309,3 +310,6 @@ animation = animation.FuncAnimation(fig, animationFrame, frames = animationFrame
     interval=1 )
 
 plt.show()
+
+# Save animation as gif
+# animation.save('patient1ex1.gif', writer = 'Pillow', fps = 60)
