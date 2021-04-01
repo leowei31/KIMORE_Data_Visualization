@@ -13,6 +13,8 @@ for k in range(4, 99, 4):
     muscle[:, k] = muscle[:, k] - np.median(muscle[:,0])
     muscle[:, k+1] = muscle[:, k+1] - np.median(muscle[:,1])
     muscle[:, k+2] = muscle[:, k+2] - np.median(muscle[:,2])
+
+    # Getting Max and Min for x y z coordinates
     xMax = max(xMax, max(muscle[:, k]))
     xMin = min(xMin, min(muscle[:, k]))
     yMax = max(yMax, max(muscle[:, k+2]))
@@ -29,7 +31,6 @@ muscle[:, 1] = muscle[:, 1] - np.median(muscle[:, 1])
 muscle[:, 2] = muscle[:, 2] - np.median(muscle[:, 2])
 
 fig = plt.figure()
-# ax = fig.gca(projection = '3d')
 ax = axes3d.Axes3D(fig)
 
 # index_Spine_Base=1 # index_Spine_Mid=5 # index_Neck=9 # index_Head=13 
@@ -41,7 +42,7 @@ ax = axes3d.Axes3D(fig)
 # index_Knee_Right=69 # index_Ankle_Right=73 # index_Foot_Right=77 # index_Spine_Shoulder=81
 # index_Tip_Left=85 # index_Thumb_Left=89 # index_Tip_Right=93 # index_Thumb_Right=97
 
-#Middle
+# Middle part of body, head, spine, and hip
 xHead = np.array(np.transpose(muscle[:, 12]))
 yHead = np.array(np.transpose(muscle[:, 13]))
 zHead = np.array(np.transpose(muscle[:, 14]))
@@ -67,7 +68,7 @@ yRightHip = np.array(np.transpose(muscle[:, 65]))
 zRightHip = np.array(np.transpose(muscle[:, 66]))
 dataRightHip = np.vstack((xRightHip, yRightHip, zRightHip))
 
-#Left side
+# Left side of body, hand, elbow, shoulder, knee, ankle
 xLeftHand = np.array(np.transpose(muscle[:,28]))
 yLeftHand = np.array(np.transpose(muscle[:,29]))
 zLeftHand = np.array(np.transpose(muscle[:,30]))
@@ -93,7 +94,7 @@ yLeftAnkle = np.array(np.transpose(muscle[:, 57]))
 zLeftAnkle = np.array(np.transpose(muscle[:, 58]))
 dataLeftAnkle = np.vstack((xLeftAnkle, yLeftAnkle, zLeftAnkle))
 
-#Right side
+# Right side of body, hand, elbow, shoulder, knee, ankle
 xRightHand = np.array(np.transpose(muscle[:,44]))
 yRightHand = np.array(np.transpose(muscle[:,45]))
 zRightHand = np.array(np.transpose(muscle[:,46]))
@@ -119,11 +120,13 @@ yRightAnkle = np.array(np.transpose(muscle[:, 73]))
 zRightAnkle = np.array(np.transpose(muscle[:, 74]))
 dataRightAnkle = np.vstack((xRightAnkle, yRightAnkle, zRightAnkle))
 
+# Setting labels
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 
 # Setting limits for x y z
+# Subtracting and adding a small number to give it more space
 xMin -= 0.1
 yMin -= 0.3
 # zMin -= 0.1
@@ -134,7 +137,7 @@ ax.set_xlim3d([xMin, xMax])
 ax.set_ylim3d([yMin, yMax])
 ax.set_zlim3d([zMin, zMax])
 
-# Left side blue dot
+# Initializing left side plot points with blue dots
 LeftHandPoint, = ax.plot(dataLeftHand[0, 0:1], dataLeftHand[1,0:1], dataLeftHand[2, 0:1], 'bo')
 
 LeftElbowPoint, = ax.plot(dataLeftElbow[0, 0:1], dataLeftElbow[1, 0:1], dataLeftElbow[2, 0:1], 'bo')
@@ -145,7 +148,7 @@ LeftKneePoint, = ax.plot(dataLeftKnee[0, 0:1], dataLeftKnee[1, 0:1], dataLeftKne
 
 LeftAnklePoint, = ax.plot(dataLeftAnkle[0, 0:1], dataLeftAnkle[1,0:1], dataLeftAnkle[2, 0:1], 'bo')
 
-# Right side red dots
+# Initializing right side plot points with red dots
 RightHandPoint, = ax.plot(dataRightHand[0, 0:1], dataRightHand[1, 0:1], dataRightHand[2, 0:1], 'ro')
 
 RightElbowPoint, = ax.plot(dataRightElbow[0, 0:1], dataRightElbow[1, 0:1], dataRightElbow[2, 0:1], 'ro')
@@ -156,19 +159,19 @@ RightKneePoint, = ax.plot(dataRightKnee[0, 0:1], dataRightKnee[1, 0:1], dataRigh
 
 RightAnklePoint, = ax.plot(dataRightAnkle[0, 0:1], dataRightAnkle[1,0:1], dataRightAnkle[2, 0:1], 'ro')
 
-# Middle spine, yellow dots
+# Initializing middle part plot points with yellow dots
 Head, = ax.plot(dataHead[0, 0:1], dataHead[1, 0:1], dataHead[2, 0:1], 'yo', markersize = 12)
 SpineMid, = ax.plot(dataSpineMid[0, 0:1], dataSpineMid[1, 0:1], dataSpineMid[2, 0:1], 'yo')
 SpineBase, = ax.plot(dataSpineBase[0, 0:1], dataSpineBase[1, 0:1], dataSpineBase[2, 0:1], 'yo')
 LeftHipPoint, = ax.plot(dataLeftHip[0, 0:1], dataLeftHip[1, 0:1], dataLeftHip[2, 0:1], 'yo')
 RightHipPoint, = ax.plot(dataRightHip[0, 0:1], dataRightHip[1, 0:1], dataRightHip[2, 0:1], 'yo')
 
-
 # Total Frame Count by total datapoints
 animationFrameCount = int(xHead.shape[0])
 animationFrameCount -=1
 
 # Animation Lines
+# Initialize a 3D line with art3d.Line3D, then adding the line onto the plot with ax.add_line
 LeftHandToElbow = art3d.Line3D([dataLeftHand[0, 0], dataLeftElbow[0, 0]], [dataLeftHand[1,0], dataLeftElbow[1, 0]], [dataLeftHand[2, 0], dataLeftElbow[2, 0]])
 ax.add_line(LeftHandToElbow)
 
@@ -219,7 +222,11 @@ def animationFrame(i, dataLeftHand, dataRightHand, dataLeftElbow, dataRightElbow
     LeftHipToLeftKnee, RightHipToRightKnee, LeftKneeToLeftAnkle, RightKneeToRightAnkle
     ):
     
-    # Left
+    # Updating process for the points
+    # First set x and y to new points from data
+    # Then set z property with set_3d_properties
+
+    # Left Side Update
     LeftHandPoint.set_data(dataLeftHand[:2, i])
     LeftHandPoint.set_3d_properties(dataLeftHand[2, i])
 
@@ -235,7 +242,7 @@ def animationFrame(i, dataLeftHand, dataRightHand, dataLeftElbow, dataRightElbow
     LeftAnklePoint.set_data(dataLeftAnkle[:2, i])
     LeftAnklePoint.set_3d_properties(dataLeftAnkle[2, i])
 
-    # Right
+    # Right Side Update
     RightHandPoint.set_data(dataRightHand[:2, i])
     RightHandPoint.set_3d_properties(dataRightHand[2, i])
 
@@ -251,7 +258,7 @@ def animationFrame(i, dataLeftHand, dataRightHand, dataLeftElbow, dataRightElbow
     RightAnklePoint.set_data(dataRightAnkle[:2, i])
     RightAnklePoint.set_3d_properties(dataRightAnkle[2, i])
 
-    # Mid
+    # Middle Part Update
     Head.set_data(dataHead[:2, i])
     Head.set_3d_properties(dataHead[2,i])
     
@@ -268,6 +275,7 @@ def animationFrame(i, dataLeftHand, dataRightHand, dataLeftElbow, dataRightElbow
     RightHipPoint.set_3d_properties(dataRightHip[2, i])
 
     # Animation Line Updates
+    # set_data_3d sets the new line with the new starting and ending points
     LeftHandToElbow.set_data_3d([dataLeftHand[0, i], dataLeftElbow[0, i]], [dataLeftHand[1,i], dataLeftElbow[1, i]],[dataLeftHand[2, i], dataLeftElbow[2, i]])
     LeftElbowToShoulder.set_data_3d([dataLeftElbow[0, i], dataLeftShoulder[0, i]], [dataLeftElbow[1,i], dataLeftShoulder[1, i]], [dataLeftElbow[2, i], dataLeftShoulder[2, i]])
     RightHandToElbow.set_data_3d([dataRightHand[0, i], dataRightElbow[0, i]], [dataRightHand[1,i], dataRightElbow[1, i]],[dataRightHand[2, i], dataRightElbow[2, i]])
@@ -283,6 +291,10 @@ def animationFrame(i, dataLeftHand, dataRightHand, dataLeftElbow, dataRightElbow
     LeftKneeToLeftAnkle.set_data_3d([dataLeftKnee[0,i], dataLeftAnkle[0,i]], [dataLeftKnee[1,i], dataLeftAnkle[1,i]], [dataLeftKnee[2,i], dataLeftAnkle[2,i]])
     RightKneeToRightAnkle.set_data_3d([dataRightKnee[0,i], dataRightAnkle[0,i]], [dataRightKnee[1,i], dataRightAnkle[1,i]], [dataRightKnee[2,i],dataRightAnkle[2,i]])
 
+# fargs are arguments that will be passed into the animationFrame function
+# frames is being set to the animationFrameCount that we calculated previously
+# interval is the number of millisecond in delay before the next frame, the higher the number, the slower the animation
+
 animation = animation.FuncAnimation(fig, animationFrame, frames = animationFrameCount,
     fargs=(dataLeftHand, dataRightHand, dataLeftElbow, dataRightElbow ,dataLeftShoulder, dataRightShoulder, 
     dataLeftKnee, dataRightKnee, dataLeftAnkle, dataRightAnkle,
@@ -294,6 +306,6 @@ animation = animation.FuncAnimation(fig, animationFrame, frames = animationFrame
     HeadToSpineMid, SpineMidToSpineBase, SpineBaseToLeftHip, SpineBaseToRightHip,
     LeftHipToLeftKnee, RightHipToRightKnee, LeftKneeToLeftAnkle, RightKneeToRightAnkle
     ),
-    interval=1, blit = False )
+    interval=1 )
 
 plt.show()
